@@ -43,7 +43,7 @@ export default function CuteRobot() {
     }
   }, [mousePosition]);
 
-  // Wave animation when clicked
+  // Animation when clicked
   const handleRobotClick = () => {
     setIsWaving(true);
     setTimeout(() => setIsWaving(false), 1000);
@@ -61,7 +61,7 @@ export default function CuteRobot() {
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         animate={{
           scale: isHovered ? 1.05 : 1,
-          y: isHovered ? -10 : 0,
+          y: isHovered ? -5 : 0,
         }}
         transition={{
           type: 'spring',
@@ -69,7 +69,7 @@ export default function CuteRobot() {
           damping: 15,
         }}
       >
-        {/* Cute Robot SVG */}
+        {/* Robot SVG based on screenshot */}
         <svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
           {/* Glow effects */}
           <defs>
@@ -77,208 +77,177 @@ export default function CuteRobot() {
               <feGaussianBlur stdDeviation="5" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
-            <radialGradient id="bodyGradient" cx="50%" cy="30%" r="50%" fx="50%" fy="30%">
-              <stop offset="0%" stopColor="#8A6FE8" />
-              <stop offset="100%" stopColor="#5D47D1" />
+            <linearGradient id="faceGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#4B0082" />
+              <stop offset="100%" stopColor="#6A5ACD" />
+            </linearGradient>
+            <radialGradient id="platformGlow" cx="50%" cy="50%" r="100%" fx="50%" fy="50%">
+              <stop offset="0%" stopColor="#9370DB" stopOpacity="1" />
+              <stop offset="100%" stopColor="#9370DB" stopOpacity="0" />
             </radialGradient>
-            <radialGradient id="shadowGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-              <stop offset="0%" stopColor="rgba(90, 71, 209, 0.3)" />
-              <stop offset="100%" stopColor="rgba(90, 71, 209, 0)" />
+            <linearGradient id="metalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#999999" />
+              <stop offset="50%" stopColor="#e0e0e0" />
+              <stop offset="100%" stopColor="#888888" />
+            </linearGradient>
+            <radialGradient id="eyeGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="1" />
+              <stop offset="80%" stopColor="#FFFFFF" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.5" />
             </radialGradient>
           </defs>
           
-          {/* Shadow */}
-          <ellipse cx="150" cy="250" rx="70" ry="20" fill="url(#shadowGradient)" opacity="0.7" />
+          {/* Purple glow under the platform */}
+          <ellipse cx="150" cy="250" rx="80" ry="20" fill="url(#platformGlow)" opacity="0.7" filter="url(#glow)" />
           
-          {/* Body */}
+          {/* Platform */}
           <motion.g
-            animate={{
-              y: [0, -5, 0],
-            }}
-            transition={{
-              duration: 2,
+            animate={{ y: [0, -3, 0] }}
+            transition={{ 
+              duration: 2, 
               repeat: Infinity,
               ease: "easeInOut"
             }}
           >
-            {/* Main body */}
-            <ellipse cx="150" cy="180" rx="55" ry="60" fill="url(#bodyGradient)" filter="url(#glow)" />
+            {/* White base platform */}
+            <rect x="100" y="220" width="100" height="25" rx="2" fill="#FFFFFF" />
+            <rect x="105" y="215" width="90" height="5" rx="1" fill="#EFEFEF" />
             
-            {/* Head */}
-            <circle cx="150" cy="110" r="45" fill="#6C5CE7" />
-            <ellipse cx="150" cy="110" rx="40" ry="42" fill="#8A6FE8" />
-            
-            {/* Face plate */}
-            <ellipse cx="150" cy="115" rx="35" ry="30" fill="#F0F0F6" />
-            
-            {/* Eyes */}
+            {/* Robot body group */}
             <g>
-              {/* Left Eye Socket */}
-              <circle cx="135" cy="110" r="12" fill="#444" />
+              {/* Legs */}
+              <rect x="130" y="200" width="10" height="20" rx="2" fill="url(#metalGradient)" />
+              <rect x="160" y="200" width="10" height="20" rx="2" fill="url(#metalGradient)" />
               
-              {/* Left Eye */}
-              <motion.circle 
-                cx="135" 
-                cy="110" 
-                r="8" 
-                fill="#111" 
-                animate={{
-                  x: robotPosition.x,
-                  y: robotPosition.y,
-                }}
-              />
+              {/* Feet */}
+              <rect x="125" y="215" width="20" height="5" rx="2" fill="url(#metalGradient)" />
+              <rect x="155" y="215" width="20" height="5" rx="2" fill="url(#metalGradient)" />
               
-              {/* Left Eye Highlight */}
-              <motion.circle 
-                cx="132" 
-                cy="107" 
-                r="3" 
-                fill="white" 
+              {/* Body */}
+              <motion.g
                 animate={{
-                  x: robotPosition.x * 0.5,
-                  y: robotPosition.y * 0.5,
-                }}
-              />
-              
-              {/* Right Eye Socket */}
-              <circle cx="165" cy="110" r="12" fill="#444" />
-              
-              {/* Right Eye */}
-              <motion.circle 
-                cx="165" 
-                cy="110" 
-                r="8" 
-                fill="#111" 
-                animate={{
-                  x: robotPosition.x,
-                  y: robotPosition.y,
-                }}
-              />
-              
-              {/* Right Eye Highlight */}
-              <motion.circle 
-                cx="162" 
-                cy="107" 
-                r="3" 
-                fill="white" 
-                animate={{
-                  x: robotPosition.x * 0.5,
-                  y: robotPosition.y * 0.5,
-                }}
-              />
-            </g>
-            
-            {/* Mouth */}
-            <motion.path
-              d="M135,130 Q150,140 165,130"
-              stroke="#444"
-              strokeWidth="3"
-              fill="none"
-              strokeLinecap="round"
-              animate={{
-                d: isHovered 
-                  ? "M135,130 Q150,145 165,130" 
-                  : "M135,130 Q150,140 165,130"
-              }}
-            />
-            
-            {/* Antennas */}
-            <motion.g
-              animate={{
-                rotate: isWaving ? [0, 5, -5, 5, -5, 0] : 0
-              }}
-              transition={{
-                duration: 1,
-                ease: "easeInOut"
-              }}
-              style={{
-                originX: "150px",
-                originY: "90px"
-              }}
-            >
-              <rect x="148" y="65" width="4" height="10" fill="#444" rx="2" />
-              <motion.circle 
-                cx="150" 
-                cy="60" 
-                r="7" 
-                fill="#6C5CE7" 
-                filter="url(#glow)"
-                animate={{
-                  opacity: [0.7, 1, 0.7],
-                  scale: [1, 1.2, 1]
+                  rotateZ: isWaving ? [0, -2, 2, -2, 0] : 0
                 }}
                 transition={{
-                  duration: 2,
-                  repeat: Infinity
+                  duration: 0.5,
+                  ease: "easeInOut"
                 }}
-              />
-            </motion.g>
+                style={{ originX: "150px", originY: "180px" }}
+              >
+                {/* Torso */}
+                <rect x="125" y="150" width="50" height="50" rx="15" fill="url(#metalGradient)" />
+                <ellipse cx="150" cy="190" rx="25" ry="12" fill="url(#metalGradient)" />
+                
+                {/* Arms */}
+                <motion.g
+                  animate={{
+                    rotateZ: isWaving ? [0, -15, -5, -15, -5, 0] : 0
+                  }}
+                  transition={{
+                    duration: 1,
+                    ease: "easeInOut"
+                  }}
+                  style={{ originX: "115px", originY: "160px" }}
+                >
+                  <rect x="105" y="155" width="20" height="10" rx="5" fill="url(#metalGradient)" />
+                  <circle cx="105" cy="160" r="6" fill="url(#metalGradient)" />
+                </motion.g>
+                
+                <motion.g
+                  animate={{
+                    rotateZ: isWaving ? [0, 5, 15, 5, 15, 0] : 0
+                  }}
+                  transition={{
+                    duration: 1,
+                    ease: "easeInOut"
+                  }}
+                  style={{ originX: "185px", originY: "160px" }}
+                >
+                  <rect x="175" y="155" width="20" height="10" rx="5" fill="url(#metalGradient)" />
+                  <circle cx="195" cy="160" r="6" fill="url(#metalGradient)" />
+                </motion.g>
+                
+                {/* Head */}
+                <g>
+                  {/* Head base - square with rounded corners */}
+                  <rect x="125" y="100" width="50" height="50" rx="5" fill="url(#metalGradient)" />
+                  
+                  {/* Dark blue/purple face plate */}
+                  <rect x="130" y="105" width="40" height="40" rx="3" fill="url(#faceGradient)" filter="url(#glow)" />
+                  
+                  {/* Eyes */}
+                  <motion.circle 
+                    cx="140" 
+                    cy="125" 
+                    r="7" 
+                    fill="url(#eyeGlow)" 
+                    filter="url(#glow)"
+                    animate={{
+                      x: robotPosition.x,
+                      y: robotPosition.y,
+                      opacity: [0.9, 1, 0.9]
+                    }}
+                    transition={{
+                      opacity: {
+                        duration: 2,
+                        repeat: Infinity
+                      }
+                    }}
+                  />
+                  
+                  <motion.circle 
+                    cx="160" 
+                    cy="125" 
+                    r="7" 
+                    fill="url(#eyeGlow)" 
+                    filter="url(#glow)"
+                    animate={{
+                      x: robotPosition.x,
+                      y: robotPosition.y,
+                      opacity: [0.9, 1, 0.9]
+                    }}
+                    transition={{
+                      opacity: {
+                        duration: 2,
+                        repeat: Infinity,
+                        delay: 0.5
+                      }
+                    }}
+                  />
+                  
+                  {/* Side "ears" */}
+                  <rect x="120" y="115" width="5" height="20" rx="2" fill="url(#metalGradient)" />
+                  <rect x="175" y="115" width="5" height="20" rx="2" fill="url(#metalGradient)" />
+                  
+                  <circle cx="122.5" cy="125" r="3" fill="#9370DB" filter="url(#glow)" />
+                  <circle cx="177.5" cy="125" r="3" fill="#9370DB" filter="url(#glow)" />
+                </g>
+              </motion.g>
+            </g>
             
-            {/* Arms */}
-            <motion.path
-              d="M95,180 C85,160 80,150 85,140"
-              stroke="#6C5CE7"
-              strokeWidth="10"
-              fill="none"
-              strokeLinecap="round"
+            {/* Purple glow on platform */}
+            <motion.ellipse 
+              cx="150" 
+              cy="220" 
+              rx="30" 
+              ry="5" 
+              fill="#9370DB" 
+              opacity="0.4"
+              filter="url(#glow)"
               animate={{
-                d: isWaving 
-                  ? "M95,180 C85,140 90,120 105,110" 
-                  : "M95,180 C85,160 80,150 85,140"
+                opacity: [0.2, 0.4, 0.2],
+                rx: [25, 30, 25]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
               }}
             />
-            <motion.circle 
-              cx="85" 
-              cy="140" 
-              r="10" 
-              fill="#8A6FE8"
-              animate={{
-                cx: isWaving ? 105 : 85,
-                cy: isWaving ? 110 : 140
-              }}
-            />
-            
-            <path
-              d="M205,180 C215,160 220,150 215,140"
-              stroke="#6C5CE7"
-              strokeWidth="10"
-              fill="none"
-              strokeLinecap="round"
-            />
-            <circle cx="215" cy="140" r="10" fill="#8A6FE8" />
-            
-            {/* Legs */}
-            <path
-              d="M130,240 C130,220 135,210 120,200"
-              stroke="#6C5CE7"
-              strokeWidth="12"
-              fill="none"
-              strokeLinecap="round"
-            />
-            <circle cx="120" cy="200" r="10" fill="#5D47D1" />
-            
-            <path
-              d="M170,240 C170,220 165,210 180,200"
-              stroke="#6C5CE7"
-              strokeWidth="12"
-              fill="none"
-              strokeLinecap="round"
-            />
-            <circle cx="180" cy="200" r="10" fill="#5D47D1" />
-            
-            {/* Feet */}
-            <ellipse cx="130" cy="240" rx="15" ry="8" fill="#5D47D1" />
-            <ellipse cx="170" cy="240" rx="15" ry="8" fill="#5D47D1" />
-            
-            {/* Belly */}
-            <circle cx="150" cy="180" r="20" fill="#F0F0F6" />
-            <circle cx="150" cy="180" r="15" fill="#E2E4F6" />
-            
-            {/* Buttons */}
-            <circle cx="150" cy="170" r="3" fill="#6C5CE7" />
-            <circle cx="150" cy="180" r="3" fill="#6C5CE7" />
-            <circle cx="150" cy="190" r="3" fill="#6C5CE7" />
           </motion.g>
+          
+          {/* Reflection */}
+          <ellipse cx="150" cy="245" rx="45" ry="4" fill="#FFFFFF" opacity="0.2" />
         </svg>
       </motion.div>
     </div>
