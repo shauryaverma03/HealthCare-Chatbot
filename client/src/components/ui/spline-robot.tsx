@@ -1,12 +1,20 @@
 import { useEffect, useState } from 'react';
-import Spline from '@splinetool/react-spline';
 import { Loader2 } from 'lucide-react';
 
 export default function SplineRobot() {
   const [isLoading, setIsLoading] = useState(true);
 
-  // Handle when Spline is loaded
-  const onLoad = () => {
+  // Set up onload handler for iframe
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // Fallback timeout in case iframe doesn't trigger onLoad
+      setIsLoading(false);
+    }, 5000);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleIframeLoad = () => {
     setIsLoading(false);
   };
 
@@ -20,12 +28,17 @@ export default function SplineRobot() {
         </div>
       )}
       
-      {/* Spline 3D scene */}
+      {/* Embedded Spline iframe directly from website */}
       <div className="w-full h-full rounded-xl overflow-hidden">
-        <Spline 
-          scene="https://prod.spline.design/DFHAZeL4EkGoTOWk/scene.splinecode" 
-          onLoad={onLoad}
-          className="w-full h-full"
+        <iframe 
+          src="https://my.spline.design/coolroboto-58f3b9da167598cdb53e3db42cdbed84/" 
+          onLoad={handleIframeLoad}
+          frameBorder="0"
+          width="100%"
+          height="100%"
+          allowFullScreen
+          title="3D Healthcare Robot"
+          className="bg-transparent"
         />
       </div>
     </div>
