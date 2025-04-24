@@ -7,6 +7,8 @@ import {
   Clock, 
   Star,
   Bot,
+  BrainCircuit,
+  MessageSquare
 } from "lucide-react";
 import ThreeDBackground from "@/components/ui/3d-background";
 
@@ -20,10 +22,10 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row items-center justify-between py-12 md:py-20">
             <div className="md:w-1/2 mb-10 md:mb-0">
               <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">
-                Your <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">AI-Powered</span> Healthcare Companion
+                Your <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">AI-Powered</span> Assistant
               </h1>
               <p className="text-lg text-gray-300 mb-8">
-                Get instant medical information, personalized health advice, and symptom evaluation from our advanced healthcare chatbot.
+                Get instant answers to your questions with our advanced AI chatbot. Smart, responsive, and always learning.
               </p>
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <Link href="/chatbot">
@@ -40,33 +42,39 @@ export default function HomePage() {
               </div>
             </div>
             <div className="md:w-1/2">
-              <div className="relative">
-                <div className="glass rounded-xl p-6 shadow-2xl overflow-hidden">
-                  <div className="mb-4 flex items-center space-x-2">
-                    <div className="bg-primary/20 p-2 rounded-full">
-                      <Bot className="h-6 w-6 text-primary" />
+              <div className="glass rounded-xl p-8 shadow-2xl">
+                <h2 className="text-2xl font-bold mb-6">AI Assistant Features</h2>
+                <div className="space-y-6">
+                  <div className="flex items-start">
+                    <div className="bg-primary/20 p-3 rounded-full mr-4">
+                      <BrainCircuit className="h-6 w-6 text-primary" />
                     </div>
-                    <h3 className="font-semibold text-lg">HealthAssist AI</h3>
+                    <div>
+                      <h3 className="font-semibold mb-1">Advanced AI Technology</h3>
+                      <p className="text-gray-300 text-sm">
+                        Powered by state-of-the-art language models for accurate, natural conversations
+                      </p>
+                    </div>
                   </div>
-                  <div className="space-y-3">
-                    <div className="bg-gray-800/50 rounded-lg p-3 transform hover:scale-[1.01] transition-transform">
-                      <p className="text-sm text-gray-300">
-                        <span className="font-medium text-white">You:</span> What symptoms indicate high blood pressure?
+                  <div className="flex items-start">
+                    <div className="bg-secondary/20 p-3 rounded-full mr-4">
+                      <MessageSquare className="h-6 w-6 text-secondary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">Conversation History</h3>
+                      <p className="text-gray-300 text-sm">
+                        Save your chat history for future reference and continue conversations seamlessly
                       </p>
                     </div>
-                    <div className="bg-gray-800/50 rounded-lg p-3 transform hover:scale-[1.01] transition-transform">
-                      <p className="text-sm text-gray-300">
-                        <span className="font-medium text-primary">HealthAssist:</span> High blood pressure (hypertension) is often called a "silent killer" because it typically doesn't cause symptoms until it reaches severe or life-threatening stages. However, some people with high blood pressure may experience:
-                      </p>
-                      <ul className="mt-2 space-y-1 text-sm text-gray-300 list-disc list-inside">
-                        <li>Headaches, particularly in the morning</li>
-                        <li>Shortness of breath</li>
-                        <li>Nosebleeds</li>
-                        <li>Visual changes</li>
-                        <li>Dizziness or lightheadedness</li>
-                      </ul>
-                      <p className="mt-2 text-sm text-gray-300">
-                        It's important to have your blood pressure checked regularly, as most people with high blood pressure don't experience symptoms.
+                  </div>
+                  <div className="flex items-start">
+                    <div className="bg-indigo-500/20 p-3 rounded-full mr-4">
+                      <Lock className="h-6 w-6 text-indigo-500" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">Private & Secure</h3>
+                      <p className="text-gray-300 text-sm">
+                        Your conversations remain private with end-to-end encryption and secure data handling
                       </p>
                     </div>
                   </div>
@@ -77,27 +85,27 @@ export default function HomePage() {
           
           {/* Features Section */}
           <div className="py-16">
-            <h2 className="text-3xl font-bold text-center mb-12">Why Choose HealthAssist AI?</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">Why Choose Our AI Assistant?</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <Card className="glass transition-all hover:translate-y-[-4px] border-none">
                 <div className="p-6">
                   <div className="bg-primary/90 text-white p-3 rounded-lg inline-block mb-4">
-                    <ShieldHalf className="h-6 w-6" />
+                    <Bot className="h-6 w-6" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-3">Medical Knowledge</h3>
+                  <h3 className="text-xl font-semibold mb-3">Intelligent Responses</h3>
                   <p className="text-gray-300">
-                    Trained on trusted medical resources to provide accurate health information and guidance.
+                    Get thoughtful answers to your questions with our context-aware AI assistant.
                   </p>
                 </div>
               </Card>
               <Card className="glass transition-all hover:translate-y-[-4px] border-none">
                 <div className="p-6">
                   <div className="bg-secondary/90 text-white p-3 rounded-lg inline-block mb-4">
-                    <Lock className="h-6 w-6" />
+                    <ShieldHalf className="h-6 w-6" />
                   </div>
                   <h3 className="text-xl font-semibold mb-3">Privacy Focused</h3>
                   <p className="text-gray-300">
-                    Your health data is encrypted and secure. We prioritize your privacy and confidentiality.
+                    Your conversations are encrypted and secure. We prioritize your privacy and confidentiality.
                   </p>
                 </div>
               </Card>
@@ -108,7 +116,7 @@ export default function HomePage() {
                   </div>
                   <h3 className="text-xl font-semibold mb-3">24/7 Availability</h3>
                   <p className="text-gray-300">
-                    Get health support anytime, anywhere - our AI assistant is always ready to help.
+                    Get assistance anytime, anywhere - our AI assistant is always ready to help.
                   </p>
                 </div>
               </Card>
@@ -137,7 +145,7 @@ export default function HomePage() {
                     </div>
                   </div>
                   <p className="text-gray-300">
-                    "The HealthAssist AI helped me understand my symptoms when I was too busy to visit a doctor. It provided helpful advice that led me to seek proper treatment."
+                    "This AI assistant has been incredibly helpful for quickly getting the information I need. The conversation history feature makes it easy to reference previous discussions."
                   </p>
                 </div>
               </Card>
@@ -159,7 +167,7 @@ export default function HomePage() {
                     </div>
                   </div>
                   <p className="text-gray-300">
-                    "As someone with chronic health issues, having access to reliable health information at any time is invaluable. This chatbot has become an essential tool for managing my health."
+                    "I love having access to such a powerful AI tool that remembers our previous conversations. It makes complex topics much easier to understand over time."
                   </p>
                 </div>
               </Card>
