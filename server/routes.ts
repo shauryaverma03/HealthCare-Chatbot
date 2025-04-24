@@ -22,8 +22,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let botResponse = "";
 
       try {
-        // Get the gemini-pro model
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        // Get the gemini-1.5-flash model - using more recent version
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         // System prompt to ensure healthcare focus with medication information
         const systemPrompt = `
@@ -41,9 +41,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         `;
 
         // Generate content with the Gemini API using system prompt + user prompt
-        const result = await model.generateContent(`${systemPrompt}\n\nUser question: ${userPrompt}`);
-        const response = await result.response;
-        botResponse = response.text();
+        const chatSession = model.startChat({
+          generationConfig: {
+            temperature: 0.7,
+            topP: 0.9,
+            topK: 40,
+          },
+        });
+        
+        const result = await chatSession.sendMessage(`${systemPrompt}\n\nUser question: ${userPrompt}`);
+        botResponse = result.response.text();
       } catch (apiError) {
         console.error("Gemini API error:", apiError);
         
