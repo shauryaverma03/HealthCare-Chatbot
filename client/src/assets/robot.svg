@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Platform with glow -->
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <radialGradient id="platformGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#8a2be2" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#8a2be2" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Platform glow -->
+  <ellipse cx="200" cy="320" rx="80" ry="30" fill="url(#platformGlow)" opacity="0.7" />
+  
+  <!-- Platform -->
+  <rect x="150" y="280" width="100" height="40" rx="5" fill="#ffffff" />
+  <rect x="152" y="282" width="96" height="36" rx="4" fill="#f0f0f0" />
+  
+  <!-- Robot Body -->
+  <g class="robot-body">
+    <!-- Legs -->
+    <path d="M180,280 C180,260 175,255 175,255 L185,255 C185,255 180,260 180,280" fill="#333333" />
+    <path d="M220,280 C220,260 225,255 225,255 L215,255 C215,255 220,260 220,280" fill="#333333" />
+    
+    <!-- Feet -->
+    <ellipse cx="175" cy="280" rx="10" ry="5" fill="#444444" />
+    <ellipse cx="225" cy="280" rx="10" ry="5" fill="#444444" />
+    
+    <!-- Torso -->
+    <path d="M165,230 L235,230 C240,230 245,235 245,240 L245,255 C245,260 240,265 235,265 L165,265 C160,265 155,260 155,255 L155,240 C155,235 160,230 165,230" fill="#333333" />
+    
+    <!-- Arms -->
+    <path d="M155,240 L145,245 C142,247 140,250 140,250 C140,250 142,252 145,253 L155,255" fill="#333333" />
+    <path d="M245,240 L255,245 C258,247 260,250 260,250 C260,250 258,252 255,253 L245,255" fill="#333333" />
+    
+    <!-- Hands -->
+    <circle cx="140" cy="250" r="5" fill="#444444" />
+    <circle cx="260" cy="250" r="5" fill="#444444" />
+    
+    <!-- Head -->
+    <rect x="165" y="180" width="70" height="50" rx="5" fill="#222222" />
+    
+    <!-- Eyes -->
+    <circle cx="185" cy="205" r="10" fill="#ffffff" filter="url(#glow)" class="eye" />
+    <circle cx="215" cy="205" r="10" fill="#ffffff" filter="url(#glow)" class="eye" />
+    
+    <!-- Antenna -->
+    <rect x="195" y="170" width="10" height="15" fill="#333333" />
+    <circle cx="200" cy="165" r="10" fill="#8a2be2" filter="url(#glow)" class="antenna" />
+    
+    <!-- Ear/Side Light -->
+    <circle cx="165" cy="205" r="5" fill="#8a2be2" filter="url(#glow)" class="side-light" />
+  </g>
+</svg>

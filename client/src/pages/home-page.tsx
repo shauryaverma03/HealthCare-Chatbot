@@ -9,6 +9,7 @@ import {
   Bot,
 } from "lucide-react";
 import ThreeDBackground from "@/components/ui/3d-background";
+import RobotAnimation from "@/components/ui/robot-animation";
 
 export default function HomePage() {
   return (
@@ -40,12 +41,8 @@ export default function HomePage() {
             </div>
             <div className="md:w-1/2">
               <div className="relative">
-                <div className="glass rounded-xl p-5 shadow-2xl">
-                  <img 
-                    src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=600&q=80" 
-                    alt="AI Healthcare Assistant Interface" 
-                    className="rounded-lg w-full" 
-                  />
+                <div className="glass rounded-xl p-1 shadow-2xl overflow-hidden flex items-center justify-center">
+                  <RobotAnimation />
                   <div className="absolute -bottom-4 -right-4 bg-secondary text-white p-3 rounded-full shadow-lg">
                     <Bot className="h-6 w-6" />
                   </div>
