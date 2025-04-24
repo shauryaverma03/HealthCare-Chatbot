@@ -41,7 +41,7 @@ export default function HomePage() {
             </div>
             <div className="md:w-1/2">
               <div className="relative">
-                <div className="glass rounded-xl p-1 shadow-2xl overflow-hidden flex items-center justify-center" style={{ height: "350px" }}>
+                <div className="glass rounded-xl p-0 shadow-2xl overflow-hidden flex items-center justify-center" style={{ height: "400px" }}>
                   <CoolRobot />
                   <div className="absolute -bottom-4 -right-4 bg-secondary text-white p-3 rounded-full shadow-lg">
                     <Bot className="h-6 w-6" />

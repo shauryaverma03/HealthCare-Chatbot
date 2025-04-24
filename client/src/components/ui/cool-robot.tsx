@@ -1,46 +1,46 @@
-import { useState, useEffect } from 'react';
-import SplineRobot from './spline-robot';
-import RobotFallback from './robot-fallback';
+import { useEffect, useState } from 'react';
+import { Loader2 } from 'lucide-react';
 
 export default function CoolRobot() {
-  const [useSpline, setUseSpline] = useState(true);
-  const [splineErrored, setSplineErrored] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Detect Spline errors and fallback to simpler version if needed
+  // Auto-hide loading screen after a timeout
   useEffect(() => {
-    const handleError = (e: ErrorEvent) => {
-      // If any error contains "Spline" or occurs in Spline related files
-      if (e.message?.includes('Spline') || e.filename?.includes('spline')) {
-        console.warn('Spline error detected, falling back to simpler robot');
-        setSplineErrored(true);
-        setUseSpline(false);
-      }
-    };
-
-    // Set up timeout in case Spline takes too long
-    const timeout = setTimeout(() => {
-      const splineCanvas = document.querySelector('canvas[data-spline-canvas]');
-      if (!splineCanvas) {
-        console.warn('Spline canvas not detected after timeout, using fallback');
-        setUseSpline(false);
-      }
-    }, 8000);
-
-    window.addEventListener('error', handleError);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 5000);
     
-    return () => {
-      window.removeEventListener('error', handleError);
-      clearTimeout(timeout);
-    };
+    return () => clearTimeout(timer);
   }, []);
+
+  const handleIframeLoad = () => {
+    setIsLoading(false);
+  };
 
   return (
     <div className="w-full h-full rounded-xl overflow-hidden relative">
-      {useSpline && !splineErrored ? (
-        <SplineRobot />
-      ) : (
-        <RobotFallback />
+      {/* Loading screen with animation */}
+      {isLoading && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 backdrop-blur-sm rounded-xl z-10">
+          <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
+          <p className="text-sm text-white">Loading 3D Robot...</p>
+        </div>
       )}
+      
+      {/* Embedded Spline iframe directly from website */}
+      <div className="w-full h-full rounded-xl overflow-hidden">
+        <iframe 
+          src="https://my.spline.design/coolroboto-58f3b9da167598cdb53e3db42cdbed84/" 
+          onLoad={handleIframeLoad}
+          frameBorder="0"
+          width="100%"
+          height="100%"
+          allowFullScreen
+          title="3D Healthcare Robot"
+          className="bg-transparent"
+          style={{ border: "none" }}
+        />
+      </div>
     </div>
   );
 }
