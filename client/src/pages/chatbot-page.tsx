@@ -217,28 +217,39 @@ export default function ChatbotPage() {
     if (!currentChatId) {
       // First add the message to the UI
       setMessages((prev) => [...prev, userMessage]);
+      const currentInputValue = input; // Store current input for later use
       setInput("");
       setIsLoading(true);
       
-      // Create a new chat
-      const res = await apiRequest("POST", "/api/chat-histories", { 
-        title: input.length > 30 ? `${input.substring(0, 30)}...` : input 
-      });
-      const newChat = await res.json();
-      
-      // Set the current chat ID
-      setCurrentChatId(newChat.id);
-      setTitleInput(newChat.title);
-      
-      // Add the message to the chat
       try {
-        await addMessageMutation.mutateAsync({
-          chatId: newChat.id,
-          message: input
+        // Create a new chat
+        const res = await apiRequest("POST", "/api/chat-histories", { 
+          title: currentInputValue.length > 30 ? `${currentInputValue.substring(0, 30)}...` : currentInputValue 
         });
-        // The assistant response will be added through the mutation success
+        const newChat = await res.json();
+        
+        // Set the current chat ID
+        setCurrentChatId(newChat.id);
+        setTitleInput(newChat.title);
+        
+        // Add the message to the chat
+        const messageRes = await apiRequest("POST", `/api/chat-histories/${newChat.id}/messages`, {
+          message: currentInputValue
+        });
+        
+        const responseData = await messageRes.json();
+        
+        // Add assistant response to messages
+        if (responseData && responseData.assistantMessage) {
+          setMessages(prev => [...prev, responseData.assistantMessage]);
+        }
       } catch (error) {
-        // Error handling is done in the mutation
+        console.error("Error sending message:", error);
+        toast({
+          title: "Error",
+          description: "Failed to send message. Please try again.",
+          variant: "destructive",
+        });
       } finally {
         setIsLoading(false);
       }
@@ -248,16 +259,28 @@ export default function ChatbotPage() {
     
     // If we have a current chat, add message to it
     setMessages((prev) => [...prev, userMessage]);
+    const currentInputValue = input; // Store current input
     setInput("");
     setIsLoading(true);
     
     try {
-      await addMessageMutation.mutateAsync({
-        chatId: currentChatId,
-        message: input
+      const res = await apiRequest("POST", `/api/chat-histories/${currentChatId}/messages`, {
+        message: currentInputValue
       });
+      
+      const responseData = await res.json();
+      
+      // Add assistant response to messages
+      if (responseData && responseData.assistantMessage) {
+        setMessages(prev => [...prev, responseData.assistantMessage]);
+      }
     } catch (error) {
-      // Error handling is done in the mutation
+      console.error("Error sending message:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
