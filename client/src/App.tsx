@@ -12,7 +12,6 @@ import ChatbotPage from "@/pages/chatbot-page";
 import ContactPage from "@/pages/contact-page";
 import AuthPage from "@/pages/auth-page";
 import ProfilePage from "@/pages/profile-page";
-import RobotPage from "@/pages/robot-page";
 import NotFound from "@/pages/not-found";
 import { ProtectedRoute } from "./lib/protected-route";
 import Navbar from "./components/layout/navbar";
@@ -22,9 +21,6 @@ import Footer from "./components/layout/footer";
 function AppRouter() {
   return (
     <Switch>
-      <Route path="/robot">
-        <RobotPage />
-      </Route>
       <Route path="/">
         <>
           <Navbar />

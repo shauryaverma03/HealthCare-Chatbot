@@ -32,11 +32,7 @@ export default function HomePage() {
                     Try Chatbot Now
                   </Button>
                 </Link>
-                <Link href="/robot">
-                  <Button variant="secondary" size="lg" className="w-full sm:w-auto px-6 py-6 font-medium">
-                    3D Robot
-                  </Button>
-                </Link>
+
                 <Link href="/about">
                   <Button variant="outline" size="lg" className="w-full sm:w-auto px-6 py-6 font-medium">
                     Learn More
@@ -46,7 +42,7 @@ export default function HomePage() {
             </div>
             <div className="md:w-1/2">
               <div className="relative">
-                <div className="glass rounded-xl p-0 shadow-2xl overflow-hidden flex items-center justify-center" style={{ height: "400px" }}>
+                <div className="glass rounded-xl p-0 shadow-2xl overflow-hidden flex items-center justify-center" style={{ height: "600px" }}>
                   <CoolRobot />
                   <div className="absolute -bottom-4 -right-4 bg-secondary text-white p-3 rounded-full shadow-lg">
                     <Bot className="h-6 w-6" />
@@ -93,6 +89,17 @@ export default function HomePage() {
                   </p>
                 </div>
               </Card>
+            </div>
+          </div>
+          
+          {/* Full-size Robot Section */}
+          <div className="py-16">
+            <h2 className="text-3xl font-bold text-center mb-4">Interactive Healthcare Assistant</h2>
+            <p className="text-center text-gray-300 max-w-2xl mx-auto mb-12">
+              Experience our advanced 3D healthcare assistant robot. Move your cursor to see it respond to your movements.
+            </p>
+            <div className="glass rounded-xl shadow-2xl overflow-hidden" style={{ height: "700px" }}>
+              <CoolRobot />
             </div>
           </div>
           
