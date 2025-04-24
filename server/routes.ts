@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { setupAuth } from "./auth";
 import { storage } from "./storage";
+import { insertChatHistorySchema, insertChatMessageSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication routes
@@ -25,19 +26,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Get the gemini-1.5-flash model - using more recent version
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-        // System prompt to ensure healthcare focus with medication information
+        // System prompt for general AI assistant
         const systemPrompt = `
-          You are HealthAssist AI, a helpful healthcare assistant.
-          Provide accurate, educational information about health topics.
-          When appropriate, recommend common over-the-counter medications or treatments for symptoms described.
-          For each medication mentioned:
-            - Explain its typical use and benefits
-            - Mention common dosing schedules (morning, with meals, before bed, etc.)
-            - Include important precautions or side effects to be aware of
-          Always clarify that you're not providing medical advice and users should consult healthcare professionals for diagnosis, treatment and specific medication guidance.
-          If asked about non-health topics, gently redirect to health-related information.
+          You are a helpful AI assistant.
+          Provide accurate, educational information and helpful answers.
+          Format your responses in a clear and organized manner.
           Keep responses concise, informative, and conversational.
-          Format medication information clearly and separately from general information.
         `;
 
         // Generate content with the Gemini API using system prompt + user prompt
@@ -155,6 +149,203 @@ For reliable health information and appropriate medication guidance, please cons
         message: "Error generating response",
         error: error instanceof Error ? error.message : "Unknown error"
       });
+    }
+  });
+
+  // Chat history endpoints
+  app.get("/api/chat-histories", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    try {
+      const histories = await storage.getChatHistories(req.user.id);
+      res.json(histories);
+    } catch (error) {
+      console.error("Error fetching chat histories:", error);
+      res.status(500).json({ error: "Failed to fetch chat histories" });
+    }
+  });
+
+  app.post("/api/chat-histories", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    try {
+      // Create chat history with user ID and title
+      const newHistory = await storage.createChatHistory({
+        userId: req.user.id,
+        title: req.body.title || "New Conversation"
+      });
+      
+      // Add welcome message
+      await storage.addChatMessage({
+        chatId: newHistory.id,
+        role: "assistant",
+        content: "Hello! How can I assist you today?"
+      });
+      
+      res.status(201).json(newHistory);
+    } catch (error) {
+      console.error("Error creating chat history:", error);
+      res.status(500).json({ error: "Failed to create chat history" });
+    }
+  });
+
+  app.get("/api/chat-histories/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    try {
+      const history = await storage.getChatHistory(parseInt(req.params.id));
+      
+      if (!history) {
+        return res.status(404).json({ error: "Chat history not found" });
+      }
+      
+      if (history.userId !== req.user.id) {
+        return res.status(403).json({ error: "Forbidden" });
+      }
+      
+      const messages = await storage.getChatMessages(history.id);
+      
+      res.json({ history, messages });
+    } catch (error) {
+      console.error("Error fetching chat history:", error);
+      res.status(500).json({ error: "Failed to fetch chat history" });
+    }
+  });
+
+  app.patch("/api/chat-histories/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    try {
+      const history = await storage.getChatHistory(parseInt(req.params.id));
+      
+      if (!history) {
+        return res.status(404).json({ error: "Chat history not found" });
+      }
+      
+      if (history.userId !== req.user.id) {
+        return res.status(403).json({ error: "Forbidden" });
+      }
+      
+      const { title } = req.body;
+      
+      if (!title || typeof title !== "string") {
+        return res.status(400).json({ error: "Title is required" });
+      }
+      
+      const updatedHistory = await storage.updateChatHistoryTitle(history.id, title);
+      res.json(updatedHistory);
+    } catch (error) {
+      console.error("Error updating chat history:", error);
+      res.status(500).json({ error: "Failed to update chat history" });
+    }
+  });
+
+  app.delete("/api/chat-histories/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    try {
+      const history = await storage.getChatHistory(parseInt(req.params.id));
+      
+      if (!history) {
+        return res.status(404).json({ error: "Chat history not found" });
+      }
+      
+      if (history.userId !== req.user.id) {
+        return res.status(403).json({ error: "Forbidden" });
+      }
+      
+      await storage.deleteChatHistory(history.id);
+      res.status(204).end();
+    } catch (error) {
+      console.error("Error deleting chat history:", error);
+      res.status(500).json({ error: "Failed to delete chat history" });
+    }
+  });
+
+  app.post("/api/chat-histories/:id/messages", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    
+    try {
+      const history = await storage.getChatHistory(parseInt(req.params.id));
+      
+      if (!history) {
+        return res.status(404).json({ error: "Chat history not found" });
+      }
+      
+      if (history.userId !== req.user.id) {
+        return res.status(403).json({ error: "Forbidden" });
+      }
+      
+      const { message } = req.body;
+      
+      if (!message) {
+        return res.status(400).json({ error: "Message is required" });
+      }
+      
+      // Add user message
+      const userMessage = await storage.addChatMessage({
+        chatId: history.id,
+        role: "user",
+        content: message
+      });
+      
+      // Get AI response
+      let aiResponse = "";
+      
+      try {
+        // Get the gemini-1.5-flash model
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        
+        // System prompt for general AI assistant
+        const systemPrompt = `
+          You are a helpful AI assistant.
+          Provide accurate, educational information and helpful answers.
+          Format your responses in a clear and organized manner.
+          Keep responses concise, informative, and conversational.
+        `;
+        
+        // Generate content with the Gemini API
+        const chatSession = model.startChat({
+          generationConfig: {
+            temperature: 0.7,
+            topP: 0.9,
+            topK: 40,
+          },
+        });
+        
+        const result = await chatSession.sendMessage(`${systemPrompt}\n\nUser question: ${message}`);
+        aiResponse = result.response.text();
+      } catch (apiError) {
+        console.error("Gemini API error in chat history:", apiError);
+        aiResponse = "I'm sorry, but I'm having trouble processing your request at the moment. Please try again later.";
+      }
+      
+      // Add AI response
+      const assistantMessage = await storage.addChatMessage({
+        chatId: history.id,
+        role: "assistant",
+        content: aiResponse
+      });
+      
+      res.json({
+        userMessage,
+        assistantMessage
+      });
+    } catch (error) {
+      console.error("Error adding message to chat:", error);
+      res.status(500).json({ error: "Failed to process chat message" });
     }
   });
 
