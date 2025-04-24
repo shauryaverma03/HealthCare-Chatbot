@@ -16,12 +16,12 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: number, userData: Partial<User>): Promise<User | undefined>;
   deleteUser(id: number): Promise<boolean>;
-  sessionStore: session.SessionStore;
+  sessionStore: any; // Store type
 }
 
 // Database Storage Implementation
 export class DatabaseStorage implements IStorage {
-  sessionStore: session.SessionStore;
+  sessionStore: any; // Store type
 
   constructor() {
     this.sessionStore = new PostgresSessionStore({ 
