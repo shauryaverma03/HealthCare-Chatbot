@@ -32,6 +32,11 @@ export default function HomePage() {
                     Try Chatbot Now
                   </Button>
                 </Link>
+                <Link href="/robot">
+                  <Button variant="secondary" size="lg" className="w-full sm:w-auto px-6 py-6 font-medium">
+                    3D Robot
+                  </Button>
+                </Link>
                 <Link href="/about">
                   <Button variant="outline" size="lg" className="w-full sm:w-auto px-6 py-6 font-medium">
                     Learn More

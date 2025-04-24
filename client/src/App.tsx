@@ -12,21 +12,82 @@ import ChatbotPage from "@/pages/chatbot-page";
 import ContactPage from "@/pages/contact-page";
 import AuthPage from "@/pages/auth-page";
 import ProfilePage from "@/pages/profile-page";
+import RobotPage from "@/pages/robot-page";
 import NotFound from "@/pages/not-found";
 import { ProtectedRoute } from "./lib/protected-route";
 import Navbar from "./components/layout/navbar";
 import Footer from "./components/layout/footer";
 
-function Router() {
+// Router for the application
+function AppRouter() {
   return (
     <Switch>
-      <Route path="/" component={HomePage} />
-      <Route path="/about" component={AboutPage} />
-      <Route path="/chatbot" component={ChatbotPage} />
-      <Route path="/contact" component={ContactPage} />
-      <Route path="/auth" component={AuthPage} />
-      <ProtectedRoute path="/profile" component={ProfilePage} />
-      <Route component={NotFound} />
+      <Route path="/robot">
+        <RobotPage />
+      </Route>
+      <Route path="/">
+        <>
+          <Navbar />
+          <div className="flex-grow">
+            <HomePage />
+          </div>
+          <Footer />
+        </>
+      </Route>
+      <Route path="/about">
+        <>
+          <Navbar />
+          <div className="flex-grow">
+            <AboutPage />
+          </div>
+          <Footer />
+        </>
+      </Route>
+      <Route path="/chatbot">
+        <>
+          <Navbar />
+          <div className="flex-grow">
+            <ChatbotPage />
+          </div>
+          <Footer />
+        </>
+      </Route>
+      <Route path="/contact">
+        <>
+          <Navbar />
+          <div className="flex-grow">
+            <ContactPage />
+          </div>
+          <Footer />
+        </>
+      </Route>
+      <Route path="/auth">
+        <>
+          <Navbar />
+          <div className="flex-grow">
+            <AuthPage />
+          </div>
+          <Footer />
+        </>
+      </Route>
+      <Route path="/profile">
+        <>
+          <Navbar />
+          <div className="flex-grow">
+            <ProtectedRoute path="/profile" component={ProfilePage} />
+          </div>
+          <Footer />
+        </>
+      </Route>
+      <Route>
+        <>
+          <Navbar />
+          <div className="flex-grow">
+            <NotFound />
+          </div>
+          <Footer />
+        </>
+      </Route>
     </Switch>
   );
 }
@@ -38,11 +99,7 @@ function App() {
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <TooltipProvider>
             <div className="flex flex-col min-h-screen dark">
-              <Navbar />
-              <div className="flex-grow">
-                <Router />
-              </div>
-              <Footer />
+              <AppRouter />
               <Toaster />
             </div>
           </TooltipProvider>
