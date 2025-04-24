@@ -9,7 +9,7 @@ import {
   Bot,
 } from "lucide-react";
 import ThreeDBackground from "@/components/ui/3d-background";
-import CoolRobot from "@/components/ui/cool-robot";
+import ExactRobot from "@/components/ui/exact-robot";
 
 export default function HomePage() {
   return (
@@ -42,7 +42,7 @@ export default function HomePage() {
             <div className="md:w-1/2">
               <div className="relative">
                 <div className="glass rounded-xl p-1 shadow-2xl overflow-hidden flex items-center justify-center" style={{ height: "350px" }}>
-                  <CoolRobot />
+                  <ExactRobot />
                   <div className="absolute -bottom-4 -right-4 bg-secondary text-white p-3 rounded-full shadow-lg">
                     <Bot className="h-6 w-6" />
                   </div>
