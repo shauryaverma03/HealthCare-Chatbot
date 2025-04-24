@@ -5,6 +5,7 @@ import { ArrowLeft, Info } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function RobotPage() {
+  console.log("Robot page loaded");
   const [isLoading, setIsLoading] = useState(true);
   const [showInfo, setShowInfo] = useState(true);
 
