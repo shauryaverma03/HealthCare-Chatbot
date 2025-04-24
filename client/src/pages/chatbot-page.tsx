@@ -63,13 +63,13 @@ export default function ChatbotPage() {
   const titleInputRef = useRef<HTMLInputElement | null>(null);
 
   // Fetch chat histories
-  const { data: chatHistories, isLoading: isLoadingHistories } = useQuery({
+  const { data: chatHistories = [], isLoading: isLoadingHistories } = useQuery<ChatHistory[]>({
     queryKey: ['/api/chat-histories'],
     enabled: !!user,
   });
 
   // Fetch specific chat history with messages
-  const { data: currentChat, isLoading: isLoadingCurrentChat } = useQuery({
+  const { data: currentChat, isLoading: isLoadingCurrentChat } = useQuery<ChatHistoryWithMessages>({
     queryKey: ['/api/chat-histories', currentChatId],
     enabled: !!currentChatId,
   });
@@ -157,7 +157,7 @@ export default function ChatbotPage() {
 
   // Update messages when current chat changes
   useEffect(() => {
-    if (currentChat) {
+    if (currentChat && currentChat.history && currentChat.messages) {
       setMessages(currentChat.messages);
       setTitleInput(currentChat.history.title);
     }

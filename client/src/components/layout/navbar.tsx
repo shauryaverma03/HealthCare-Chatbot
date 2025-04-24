@@ -10,12 +10,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { 
-  Stethoscope, 
+  Bot, 
   Menu, 
   X, 
   User, 
   Settings, 
   LogOut,
+  MessageSquare,
+  History
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -35,7 +37,8 @@ export default function Navbar() {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    { name: "Healthcare Chatbot", path: "/chatbot" },
+    { name: "AI Chatbot", path: "/chatbot" },
+    { name: "Chat History", path: "/chat-history" },
     { name: "Contact", path: "/contact" },
   ];
 
@@ -44,9 +47,9 @@ export default function Navbar() {
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2">
           <div className="bg-gradient-to-r from-primary to-secondary rounded-lg p-1">
-            <Stethoscope className="text-white h-5 w-5" />
+            <Bot className="text-white h-5 w-5" />
           </div>
-          <span className="text-xl font-bold text-white font-heading">HealthAssist AI</span>
+          <span className="text-xl font-bold text-white font-heading">AI Assistant</span>
         </Link>
         
         {/* Desktop Navigation */}
@@ -80,6 +83,12 @@ export default function Navbar() {
                   <DropdownMenuItem className="cursor-pointer">
                     <User className="mr-2 h-4 w-4" />
                     <span>Your Profile</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/chat-history">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <History className="mr-2 h-4 w-4" />
+                    <span>Chat History</span>
                   </DropdownMenuItem>
                 </Link>
                 <Link href="/profile">

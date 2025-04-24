@@ -9,6 +9,7 @@ import { AuthProvider } from "./hooks/use-auth";
 import HomePage from "@/pages/home-page";
 import AboutPage from "@/pages/about-page";
 import ChatbotPage from "@/pages/chatbot-page";
+import ChatHistoryPage from "@/pages/chat-history-page";
 import ContactPage from "@/pages/contact-page";
 import AuthPage from "@/pages/auth-page";
 import ProfilePage from "@/pages/profile-page";
@@ -44,6 +45,15 @@ function AppRouter() {
           <Navbar />
           <div className="flex-grow">
             <ChatbotPage />
+          </div>
+          <Footer />
+        </>
+      </Route>
+      <Route path="/chat-history">
+        <>
+          <Navbar />
+          <div className="flex-grow">
+            <ProtectedRoute path="/chat-history" component={ChatHistoryPage} />
           </div>
           <Footer />
         </>
